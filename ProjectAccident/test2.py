@@ -1,3 +1,4 @@
+import os
 from sklearn.tree import DecisionTreeClassifier
 import matplotlib.pyplot as plt
 from sklearn.tree import plot_tree
@@ -6,8 +7,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 
-file_path = 'Data/AfSBBB_BE_LOR_Strasse_Strassenverkehrsunfaelle_2021_Datensatz.csv'
-df = pd.read_csv(file_path, sep=';')
+csv_directory = 'Data/'
+csv_files = [os.path.join(csv_directory, f) for f in os.listdir(csv_directory) if f.endswith('.csv')]
+
+dfs = [pd.read_csv(file, sep=';') for file in csv_files]
+df = pd.concat(dfs, ignore_index=True)
 
 print(df.head())
 print(df.describe())
