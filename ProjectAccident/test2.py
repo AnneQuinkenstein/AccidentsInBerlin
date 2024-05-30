@@ -16,6 +16,14 @@ df = pd.concat(dfs, ignore_index=True)
 print(df.head())
 print(df.describe())
 
+# Überprüfen Sie, ob es fehlende Werte in Ihrem DataFrame gibt
+missing_values = df.isnull().sum()
+
+# Ausgabe der Anzahl der fehlenden Werte pro Spalte
+print("Fehlende Werte pro Spalte:")
+print(missing_values)
+
+
 
 y=df['UART']
 X=df[['UMONAT','USTUNDE','UWOCHENTAG','UKATEGORIE','USTRZUSTAND','BEZ','UTYP1','ULICHTVERH','IstRad','IstPKW','IstFuss','IstKrad','IstGkfz','IstSonstige']]
