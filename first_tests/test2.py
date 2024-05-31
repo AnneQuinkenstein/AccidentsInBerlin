@@ -8,10 +8,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 
 csv_directory = '../data'
-csv_files = [os.path.join(csv_directory, f) for f in os.listdir(csv_directory) if f.endswith('.csv')]
+csv_file = 'GeneralDatensatz18-21.csv'
+csv_path = os.path.join(csv_directory, csv_file)
 
-dfs = [pd.read_csv(file, sep=';') for file in csv_files]
-df = pd.concat(dfs, ignore_index=True)
+df = pd.read_csv(csv_path, sep=';')
 
 print(df.head())
 print(df.describe())
@@ -25,8 +25,8 @@ print(missing_values)
 
 
 
-y=df['UART']
-X=df[['UMONAT','USTUNDE','UWOCHENTAG','UKATEGORIE','USTRZUSTAND','BEZ','UTYP1','ULICHTVERH','IstRad','IstPKW','IstFuss','IstKrad','IstGkfz','IstSonstige']]
+y=df['UKATEGORIE']
+X=df[['UMONAT','USTUNDE','UWOCHENTAG','UART','USTRZUSTAND','BEZ','UTYP1','ULICHTVERH','IstRad','IstPKW','IstFuss','IstKrad','IstGkfz','IstSonstige']]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
 
