@@ -16,14 +16,21 @@ df = pd.read_csv(csv_path, sep=';')
 print(df.head())
 print(df.describe())
 
-# Überprüfen Sie, ob es fehlende Werte in Ihrem DataFrame gibt
+# Wo fehlen Werte? Welche Zeilen?
 missing_values = df.isnull().sum()
 
-# Ausgabe der Anzahl der fehlenden Werte pro Spalte
 print("Fehlende Werte pro Spalte:")
 print(missing_values)
 
+missing_mask = df.isnull()
 
+print("Positionen der fehlenden Werte:")
+for col in missing_mask.columns:
+    if missing_mask[col].any():
+        missing_rows = missing_mask[missing_mask[col]].index.tolist()
+        print(f"Spalte '{col}' hat fehlende Werte in den Zeilen: {missing_rows}")
+
+# LOR Daten missing: Jahr 2021 obj 214125, 2020 obj 136842, 2018 obj 199484, 2018 obj 200009, 2018 obj 200322 missing
 
 y=df['UKATEGORIE']
 X=df[['UMONAT','USTUNDE','UWOCHENTAG','UART','USTRZUSTAND','BEZ','UTYP1','ULICHTVERH','IstRad','IstPKW','IstFuss','IstKrad','IstGkfz','IstSonstige']]
@@ -45,3 +52,10 @@ plt.figure(figsize=(30,15))
 
 plot_tree(clf,filled=True, feature_names=X.columns)
 plt.savefig('treeAcc.png')
+
+plt.show()
+
+# Wichtigkeit der Merkmale anzeigen
+feature_importances = pd.DataFrame(clf.feature_importances_, index=X.columns, columns=['importance']).sort_values('importance', ascending=False)
+print("Wichtigkeit der Merkmale:")
+print(feature_importances)

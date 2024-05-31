@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
 
-file_path = '../data/AfSBBB_BE_LOR_Strasse_Strassenverkehrsunfaelle_2021_Datensatz.csv'
+file_path = '../data/GeneralDatensatz18-21.csv'
 df = pd.read_csv(file_path, sep=';')
 
 df.head()
