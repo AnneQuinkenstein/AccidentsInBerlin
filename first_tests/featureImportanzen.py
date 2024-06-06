@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.ensemble import RandomForestClassifier
 
 # Laden des Datensatzes
 data = pd.read_csv('../data/GeneralDatensatz18-21ohneGeo.csv', sep=';')
@@ -10,11 +11,9 @@ data = pd.read_csv('../data/GeneralDatensatz18-21ohneGeo.csv', sep=';')
 target = 'UKATEGORIE'
 features = ['USTUNDE', 'UMONAT', 'UWOCHENTAG', 'BEZ', 'UTYP1', 'UJAHR']
 
-# Berechnung der Feature-Importanzen mit einem RandomForestClassifier (oder DecisionTreeClassifier)
-from sklearn.ensemble import RandomForestClassifier
 
 X = data[features]
-y = data[target]
+y = (data[target] == 1).astype(int)
 
 # Codieren der kategorischen Merkmale
 X = pd.get_dummies(X, columns=features)
