@@ -18,7 +18,7 @@ else:
 
 # Vorbereiten der Daten
 X = data.drop('UKATEGORIE', axis=1)
-y = data['UKATEGORIE']
+y = (data['UKATEGORIE'] == 1).astype(int)
 
 # Train-Test-Split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
