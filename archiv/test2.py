@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 
 csv_directory = '../data'
-csv_file = '../GeneralDatensatz18-21ohneGeo.csv'
+csv_file = '../data/GeneralDatensatz18-21ohneGeo.csv'
 csv_path = os.path.join(csv_directory, csv_file)
 
 df = pd.read_csv(csv_path, sep=';')
