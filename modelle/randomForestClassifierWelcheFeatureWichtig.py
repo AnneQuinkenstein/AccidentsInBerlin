@@ -21,3 +21,4 @@ rf_clf.fit(X_train, y_train)
 rf_feature_importances = pd.DataFrame(rf_clf.feature_importances_, index=X.columns, columns=['importance']).sort_values('importance', ascending=False)
 print("Wichtigkeit der Merkmale (Random Forest):")
 print(rf_feature_importances)
+
