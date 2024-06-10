@@ -5,16 +5,6 @@ from sklearn.model_selection import train_test_split
 # Laden der Daten
 data = pd.read_csv('../data/GeneralDatensatz18-21ohneGeo.csv', sep=';')
 
-duplicate_objectids = data[data.duplicated('OBJECTID', keep=False)]
-
-# Anzahl der doppelten OBJECTID-Werte
-num_duplicates = duplicate_objectids.shape[0]
-
-if num_duplicates > 0:
-    print(f'Es gibt {num_duplicates} doppelte OBJECTID-Werte:')
-    print(duplicate_objectids)
-else:
-    print('Es gibt keine doppelten OBJECTID-Werte.')
 
 # Vorbereiten der Daten
 X = data.drop('UKATEGORIE', axis=1)
