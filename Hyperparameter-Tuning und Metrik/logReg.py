@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 df = pd.read_csv('../data/GeneralDatensatz18-21ohneGeo-mitLockdown_mitCorona.csv', sep=';')
 
 # Features und Zielvariable definieren
-X = df[['UMONAT', 'USTUNDE', 'UWOCHENTAG', 'UART', 'USTRZUSTAND', 'BEZ', 'UTYP1', 'ULICHTVERH', 'IstRad', 'IstPKW', 'IstFuss', 'IstKrad', 'IstGkfz', 'IstSonstige', 'LOCKDOWN', 'COVID']]
+X = df[['UMONAT','USTUNDE','UWOCHENTAG','UART','USTRZUSTAND','BEZ','UTYP1','ULICHTVERH','IstRad','IstPKW','IstFuss','IstKrad','IstGkfz','IstSonstige', 'LOCKDOWN', 'COVID']]
 y = df['UKATEGORIE'].isin([1, 2]).astype(int)  # 1 für schwere/tödliche Unfälle, 0 für leichte Unfälle
 
 # KFold-Konfiguration
@@ -27,15 +27,15 @@ param_grid = {
     'logistic__solver': ['lbfgs'],
     'logistic__max_iter': [500, 1000, 2000],
     'logistic__tol': [1e-4, 1e-3, 1e-2],
-    'logistic__class_weight': [{0: 1, 1: w} for w in range(5, 16)]
+    'logistic__class_weight': [{0: 1, 1: 9}]
 }
+
 
 # Pipeline mit Skalierung und Modell
 pipeline = Pipeline([
     ('scaler', StandardScaler()),
     ('logistic', LogisticRegression())
 ])
-
 # Grid Search durchführen
 grid_search = GridSearchCV(estimator=pipeline, param_grid=param_grid, cv=kf, scoring=fbeta_scorer, n_jobs=-1, verbose=1)
 grid_search.fit(X, y)
