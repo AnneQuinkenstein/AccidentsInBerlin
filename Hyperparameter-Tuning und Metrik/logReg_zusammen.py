@@ -51,3 +51,12 @@ results = results.sort_values(by='rank_test_score')
 print(results[['params', 'mean_test_score', 'std_test_score', 'rank_test_score']])
 
 
+# Fbeta-Scores plotten
+#plt.figure(figsize=(10, 6))
+#plt.plot(logistic__C, logReg_logistic__C, marker='o', label='Logistic Regression')
+#plt.title('Fbeta-Scores für verschiedene C-Werte der Logistischen Regression')
+#plt.xlabel('weights')
+#plt.ylabel('Fbeta-Score')
+#plt.legend()
+#plt.grid(True)
+#plt.show()
