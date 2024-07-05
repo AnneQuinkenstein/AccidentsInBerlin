@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import GridSearchCV, KFold
+from sklearn.model_selection import GridSearchCV, KFold, cross_val_score
 from sklearn.metrics import fbeta_score, make_scorer
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
@@ -17,7 +17,7 @@ y = df['UKATEGORIE'].isin([1, 2]).astype(int)  # 1 für schwere/tödliche Unfäl
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
 
 # Definieren des F-beta-Scores mit beta = 2
-beta = 2
+beta = 3
 fbeta_scorer = make_scorer(fbeta_score, beta=beta)
 
 # Definieren des Parametergrids für die Grid Search
@@ -30,32 +30,41 @@ param_grid = {
     'logistic__class_weight': [{0: 1, 1: 9}]
 }
 
+logistic__C = [0.001, 0.01, 0.1, 1, 10, 100]
+logistic__max_iter = [100, 1000, 10000]
 
-# Pipeline mit Skalierung und Modell
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('logistic', LogisticRegression())
-])
-# Grid Search durchführen
-grid_search = GridSearchCV(estimator=pipeline, param_grid=param_grid, cv=kf, scoring=fbeta_scorer, n_jobs=-1, verbose=1)
-grid_search.fit(X, y)
+logReg_logistic__C = []
+logReg_max_iter = []
 
-# Beste Parameter und Modellleistung anzeigen
-print("Beste Parameter:", grid_search.best_params_)
-print("Beste Modellleistung (F-beta-Score):", grid_search.best_score_)
+for C_value in logistic__C:
+    log_reg = LogisticRegression(C=C_value, max_iter=1000, class_weight={0: 1, 1: 9})
+    fbeta_reg = cross_val_score(log_reg, X, y, cv=kf, scoring=fbeta_scorer)
+    print(f"C_value: {C_value} Fbeta Score Logistische Regression (k-fold): {fbeta_reg.mean()}")
+    logReg_logistic__C.append(fbeta_reg.mean())
+    
 
-# Ergebnisse der Grid Search visualisieren
-results = pd.DataFrame(grid_search.cv_results_)
-results = results.sort_values(by='rank_test_score')
-
-print(results[['params', 'mean_test_score', 'std_test_score', 'rank_test_score']])
-
-# Visualisierung
+# Fbeta-Scores plotten
 plt.figure(figsize=(10, 6))
-plt.plot(results['param_logistic__class_weight'].apply(lambda x: list(x.values())[1]), results['mean_test_score'], marker='o', label='Logistic Regression F-beta')
-plt.xlabel('Class Weight for Positive Class')
-plt.ylabel('Mean F-beta Score')
-plt.title('F-beta Score für verschiedene Gewichte')
+plt.plot(logistic__C, logReg_logistic__C, marker='o', label='Logistic Regression')
+plt.title('Fbeta-Scores für verschiedene C-Werte der Logistischen Regression')
+plt.xlabel('Stärke der Regularisierung (C)')
+plt.ylabel('Fbeta-Score')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+for max_iter_value in logistic__max_iter:
+    log_reg = LogisticRegression(C=1, max_iter=max_iter_value, class_weight={0: 1, 1: 9})
+    fbeta_reg = cross_val_score(log_reg, X, y, cv=kf, scoring=fbeta_scorer)
+    print(f"max_iter_value: {max_iter_value} Fbeta Score Logistische Regression (k-fold): {fbeta_reg.mean()}")
+    logReg_max_iter.append(fbeta_reg.mean())
+
+# Fbeta-Scores plotten
+plt.figure(figsize=(10, 6))
+plt.plot(logistic__max_iter, logReg_max_iter, marker='o', label='Logistic Regression')
+plt.title('Fbeta-Scores für verschiedene max_iter')
+plt.xlabel('max_iter')
+plt.ylabel('Fbeta-Score')
 plt.legend()
 plt.grid(True)
 plt.show()
