@@ -6,7 +6,7 @@ import time
 
 
 csv_file_path = '../data/GeneralDatensatz18-21.csv'
-geojson_file_path = '../data/cycle_net_berlin_cleaned_maxspeed.geojson'
+geojson_file_path = '../data/cycle_net_berlin_cleaned_surface.geojson'
 
 # Accident
 start_time = time.time()
@@ -20,7 +20,7 @@ if df['XGCSWGS84'].dtype == object:
 if df['YGCSWGS84'].dtype == object:
     df['YGCSWGS84'] = df['YGCSWGS84'].str.replace(',', '.').astype(float)
 
-# maxSpeed 20/30/50/60 kmh
+# highway residential, primary, secondary, tertiary, service, living_street
 start_time = time.time()
 geo_df = gpd.read_file(geojson_file_path)
 geojson_load_time = time.time() - start_time
