@@ -6,7 +6,7 @@ import time
 
 
 csv_file_path = '../data/GeneralDatensatz18-21.csv'
-geojson_file_path = '../data/cycle_net_berlin_cleaned_surface.geojson'
+geojson_file_path = '../data/filtered_osm_highway_v1.geojson'
 
 # Accident
 start_time = time.time()
@@ -64,3 +64,5 @@ result_df = pd.DataFrame(result)
 
 # Ausgabe der ersten Zeilen des Ergebnisses
 print(result_df.head())
+print(result_df.describe())
+print(result_df['in_cycle_net'].value_counts())

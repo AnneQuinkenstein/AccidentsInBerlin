@@ -64,3 +64,5 @@ result_df = pd.DataFrame(result)
 
 # Ausgabe der ersten Zeilen des Ergebnisses
 print(result_df.head())
+print(result_df.describe())
+print(result_df['in_cycle_net'].value_counts())
