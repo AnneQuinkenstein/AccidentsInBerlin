@@ -4,7 +4,6 @@ from shapely.geometry import Point, MultiLineString, LineString
 from rtree import index
 import time
 
-
 csv_file_path = '../data/GeneralDatensatz18-21.csv'
 geojson_file_path = '../data/filtered_osm_highway_v1.geojson'
 
@@ -33,34 +32,45 @@ line_strings = [line for lines in geo_df['line_strings'] for line in lines]
 geometry_processing_time = time.time() - start_time
 print(f"Zeit für die Umwandlung der Geometrien: {geometry_processing_time:.2f} Sekunden")
 
-#Problem Ladezeit weil data zu groß
 # Erstellen eines räumlichen Indexes für die LineStrings und begrenzung der linestrings in den index eingefügt
 spatial_index = index.Index()
 for pos, line in enumerate(line_strings):
     spatial_index.insert(pos, line.bounds)
 
 # räuml. Index nutzen, um die Anwärter rauszufiltern, die in der Nähe eines Punkts sind, dann prüfen ob innerhalb eines gepufferten LineStrings
-def is_point_in_linestrings(point, line_strings, spatial_index):
+def get_linestring_index_if_contains_point(point, line_strings, spatial_index):
     # Kandidaten aus dem räumlichen Index abrufen
     candidate_idxs = list(spatial_index.intersection(point.bounds))
     for idx in candidate_idxs:
         line = line_strings[idx]
         if point.within(line.buffer(0.0001)):  # Verwende einen kleinen Puffer, falls die Punkte auf den Linien liegen sollen
-            return True
-    return False
-
+            return idx
+    return None
 
 start_time = time.time()
 result = []
+highway_categories = []
 for idx, row in df.iterrows():
     point = Point(row['XGCSWGS84'], row['YGCSWGS84'])
-    in_cycle_net = is_point_in_linestrings(point, line_strings, spatial_index)
+    line_idx = get_linestring_index_if_contains_point(point, line_strings, spatial_index)
+    in_cycle_net = line_idx is not None
     result.append({'XGCSWGS84': row['XGCSWGS84'], 'YGCSWGS84': row['YGCSWGS84'], 'in_cycle_net': in_cycle_net})
+    if line_idx is not None:
+        highway_categories.append(geo_df.iloc[line_idx]['highway'])
+    else:
+        highway_categories.append(None)
+
 coordinate_check_time = time.time() - start_time
 print(f"Zeit für die Überprüfung der Koordinaten: {coordinate_check_time:.2f} Sekunden")
 
 # Ergebnis als DataFrame
 result_df = pd.DataFrame(result)
+
+# Hinzufügen der highway Spalte zu df
+df['highway'] = highway_categories
+
+# Speichern der aktualisierten CSV-Datei
+df.to_csv('../data/GeneralDatensatz18-21_with_highway.csv', index=False)
 
 # Ausgabe der ersten Zeilen des Ergebnisses
 print(result_df.head())
