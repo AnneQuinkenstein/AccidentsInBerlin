@@ -55,7 +55,7 @@ def is_point_in_linestrings(point, line_strings, spatial_index, buffer_distance=
             return True
     return False
 
-buffer_distances = [0.0001, 0.0002, 0.0003, 0.0004, 0.0005]  # Verschiedene Puffergrößen
+buffer_distances = [0.0001, 0.0002, 0.0003, 0.0004, 0.0005, 0.1]  # Verschiedene Puffergrößen
 for distance in buffer_distances:
     result = []
     for idx, row in df.iterrows():
