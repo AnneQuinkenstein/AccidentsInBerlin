@@ -10,6 +10,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/data/GeneralDatensatz18-21.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/GeneralDatensatz18-21_with_additional_info.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/GeneralDatensatz18-21_with_highway.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/data/GeneralDatensatz18-21ohneGeo-mitLockdown_mitCorona.csv">
           <value>
             <Attribute>
@@ -17,7 +38,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/data/GeneralDatensatz18-21ohneGeo-mitLockdown_mitCorona_mitFerien.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/GeneralDatensatz18-21ohneGeo.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/data/train_data_2024-08-01.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data_cleaning/covid_klassifiziert.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
