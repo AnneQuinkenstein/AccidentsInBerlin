@@ -1,0 +1,23 @@
+,Chat-einschätzung der zahlen für berlin,inzidenz berlin 7 tage laut chat,Todesfaelle laut chat,stimmung/angst/risikowahrnehung (deutschlandweit?) – geschätzt laut Graphik,Kmeans mit 2 kategorien,kmeans mit 3 kategorien,kmeans mit 4 kategorien
+maerz20,moderat,17.5,8,sehr hoch,1,1,3
+april20,hoch,25,167,hoch,0,0,0
+mai20,abnehmend,7.5,64,moderat,1,1,3
+juni20,niedrig,3.5,12,moderat,1,1,3
+juli20,niedrig,3.5,4,niedrig,1,1,1
+august20,niedrig,7.5,3,moderat,1,1,3
+september20,niedrig,15,8,moderat,1,1,3
+oktober20,hoch,40,25,hoch,1,0,0
+november20,hoch,150,181,hoch,0,0,0
+dezember20,hoch,250,569,hoch,0,2,2
+januar21,hoch,250,639,hoch,0,2,2
+februar21,hoch,80,224,hoch,0,0,0
+maerz21,hoch,125,141,hoch,0,0,0
+april21,hoch,125,165,hoch,0,0,0
+mai21,hoch,75,132,niedrig,1,0,0
+juni21,abnehmend,15,22,niedrig,1,1,1
+juli21,niedrig,7.5,6,niedrig,1,1,1
+august21,niedrig,35,14,niedrig,1,1,1
+september21,niedrig,75,23,moderat,1,1,3
+oktober21,moderat/beginnender anstieg),125,71,moderat,1,0,3
+november21,hoch,250,174,hoch,0,0,0
+dezember21,hoch,350,222,hoch,0,2,2
