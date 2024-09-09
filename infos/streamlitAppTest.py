@@ -1,4 +1,4 @@
-
+import joblib
 import streamlit as st
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
@@ -8,7 +8,8 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 # Daten laden und Modell laden
 data = pd.read_csv('../data/GeneralDatensatz18-21ohneGeo.csv', sep=';')
-#model_filename = "../modelle/rf_featureImportanzen.pkl" # Pfad zum Modell schwere und tödliche unfälle vorherzusagen
+model_filename = "../train_validate_test_split/random_forest_model.pkl" # Pfad zum Modell schwere und tödliche unfälle vorherzusagen
+model = joblib.load(model_filename)
 
 # Modell laden
 #with open(model_filename, 'rb') as file:
@@ -101,54 +102,48 @@ road_condition_name = st.sidebar.selectbox("Straßenzustand", list(reverse_road_
 road_condition = reverse_road_condition_mapping[road_condition_name]
 light_condition_name = st.sidebar.selectbox("Lichtverhältnisse", list(light_condition_mapping.keys()))
 light_condition = light_condition_mapping[light_condition_name]
-
 vehicle_type = st.sidebar.radio("Verkehrsmittel", ['Rad', 'Auto', 'Kraftrad', 'Zu Fuß', 'Lastkraftwagen', 'Sonstige'])
 
 # Abbildung der Eingabedaten auf die Merkmale des Modells
 input_data = {
-    "LAND": land,
-    "BEZ": district,
-    #"LOR_ab_2021": 0,
-    "UJAHR": 0,
-    "UMONAT": month,
-    "USTUNDE": hour,
-    "UWOCHENTAG": weekday,
-    #"UKATEGORIE": 0,
-    "UART": 0,
-    "UTYP1": 0,
-    "ULICHTVERH": light_condition,
-    "IstRad": 1 if vehicle_type == 'Rad' else 0,
-    "IstPKW": 1 if vehicle_type == 'Auto' else 0,
-    "IstFuss": 1 if vehicle_type == 'Zu Fuß' else 0,
-    "IstKrad": 1 if vehicle_type == 'Kraftrad' else 0,
-    "IstGkfz": 1 if vehicle_type == 'Lastkraftwagen' else 0,
-    "IstSonstige": 1 if vehicle_type == 'Sonstige' else 0,
-    "USTRZUSTAND": road_condition
-  }
+    "BEZ": [district],
+    "UJAHR": [0],
+    "UMONAT": [month],
+    "USTUNDE": [hour],
+    "UWOCHENTAG": [weekday],
+    "UART": [0],
+    "UTYP1": [0],
+    "ULICHTVERH": [light_condition],
+    "IstRad": [1 if vehicle_type == 'Rad' else 0],
+    "IstPKW": [1 if vehicle_type == 'Auto' else 0],
+    "IstFuss": [1 if vehicle_type == 'Zu Fuß' else 0],
+    "IstKrad": [1 if vehicle_type == 'Kraftrad' else 0],
+    "IstGkfz": [1 if vehicle_type == 'Lastkraftwagen' else 0],
+    "IstSonstige": [1 if vehicle_type == 'Sonstige' else 0],
+    "USTRZUSTAND": [road_condition],
+    "LOCKDOWN": [0],
+    "COVID": [0],
+    "FERIEN": [0]
+}
 
 # Vorhersage
-input_df = pd.DataFrame([input_data])
-prediction = model.predict(input_df)
-prediction_proba = model.predict_proba(input_df)
+input_df = pd.DataFrame(input_data)
+prediction = model.predict(input_df)[0]
+prediction_proba = model.predict_proba(input_df)[0]
 
-st.subheader("Vorhersage")
-st.write(f"Unfallkategorie: {prediction[0]}")
+# Ausgabe der Ergebnisse
+st.subheader("Vorhersage des Unfalltyps")
+categories = {1: "Schwer", 0: "Tödlich"}
+st.write(f"Unfallkategorie: {categories[prediction]}")
 
-st.subheader("Wahrscheinlichkeit")
-st.bar_chart(prediction_proba[0])
+# Wahrscheinlichkeiten anzeigen
+st.subheader("Wahrscheinlichkeit für jede Unfallkategorie")
+probabilities = {
+    "Schwer": prediction_proba[1],
+    "Tödlich": prediction_proba[0]
+}
+# Erstellen eines DataFrames für das Balkendiagramm
+probabilities_df = pd.DataFrame(probabilities, index=["Wahrscheinlichkeit"])
 
-
-
-# Extrahieren der Feature-Importanzen
-feature_importances = model.feature_importances_
-features = ["LAND", "BEZ", "UJAHR", "UMONAT", "USTUNDE", "UWOCHENTAG", "UART", "UTYP1", "ULICHTVERH", "IstRad", "IstPKW", "IstFuss", "IstKrad", "IstGkfz", "IstSonstige", "USTRZUSTAND"]
-
-# Erstellen eines DataFrames für die Feature-Importanzen
-importance_df = pd.DataFrame({
-    'Feature': features,
-    'Importance': feature_importances
-}).sort_values(by='Importance', ascending=False)
-
-# Anzeige der Feature-Importanzen in der Streamlit-App
-st.subheader("Feature-Importanzen für die Unfallschwere (UKATEGORIE 2)")
-st.bar_chart(importance_df.set_index('Feature'))
+# Balkendiagramm anzeigen
+st.bar_chart(probabilities_df.T)
