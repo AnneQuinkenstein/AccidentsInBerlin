@@ -8,12 +8,8 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 # Daten laden und Modell laden
 data = pd.read_csv('../data/GeneralDatensatz18-21ohneGeo.csv', sep=';')
-model_filename = "../train_validate_test_split/random_forest_model.pkl" # Pfad zum Modell schwere und tödliche unfälle vorherzusagen
+model_filename = "../modelle_getuned/random_forest_model.pkl" # Pfad zum Modell schwere und tödliche unfälle vorherzusagen
 model = joblib.load(model_filename)
-
-# Modell laden
-#with open(model_filename, 'rb') as file:
-#    model = pickle.load(file)
 
 # Benutzeroberfläche
 st.title("Unfallschwere Vorhersage")
@@ -103,6 +99,8 @@ road_condition = reverse_road_condition_mapping[road_condition_name]
 light_condition_name = st.sidebar.selectbox("Lichtverhältnisse", list(light_condition_mapping.keys()))
 light_condition = light_condition_mapping[light_condition_name]
 vehicle_type = st.sidebar.radio("Verkehrsmittel", ['Rad', 'Auto', 'Kraftrad', 'Zu Fuß', 'Lastkraftwagen', 'Sonstige'])
+ferien = st.sidebar.selectbox("Ferien", ["Ja", "Nein"])
+covid = st.sidebar.selectbox("COVID", ["Nein", "Ja"])
 
 # Abbildung der Eingabedaten auf die Merkmale des Modells
 input_data = {
@@ -122,28 +120,42 @@ input_data = {
     "IstSonstige": [1 if vehicle_type == 'Sonstige' else 0],
     "USTRZUSTAND": [road_condition],
     "LOCKDOWN": [0],
-    "COVID": [0],
-    "FERIEN": [0]
+    "COVID": [1 if covid == "Ja" else 0],
+    "FERIEN": [1 if ferien == "Ja" else 0]
 }
 
 # Vorhersage
 input_df = pd.DataFrame(input_data)
-prediction = model.predict(input_df)[0]
+prediction = model.predict(input_df)[0] # [0] is used to get the prediction as a scalar instead of an array
 prediction_proba = model.predict_proba(input_df)[0]
 
 # Ausgabe der Ergebnisse
 st.subheader("Vorhersage des Unfalltyps")
-categories = {1: "Schwer", 0: "Tödlich"}
-st.write(f"Unfallkategorie: {categories[prediction]}")
+categories = {1: "Leicht", 0: "Schwer"}
 
 # Wahrscheinlichkeiten anzeigen
 st.subheader("Wahrscheinlichkeit für jede Unfallkategorie")
 probabilities = {
-    "Schwer": prediction_proba[1],
-    "Tödlich": prediction_proba[0]
+    "Leicht": prediction_proba[1],
+    "Schwer": prediction_proba[0]
 }
 # Erstellen eines DataFrames für das Balkendiagramm
 probabilities_df = pd.DataFrame(probabilities, index=["Wahrscheinlichkeit"])
 
 # Balkendiagramm anzeigen
 st.bar_chart(probabilities_df.T)
+
+# Wahrscheinlichkeiten in Prozent umrechnen
+leicht_prozent = probabilities["Leicht"] * 100
+schwer_prozent = probabilities["Schwer"] * 100
+
+# Zusammenfassende Anzeige der Wahrscheinlichkeiten
+st.write(f"Unter den von dir eingegebenen Bedingungen beträgt die Wahrscheinlichkeit für einen leichten Unfall {leicht_prozent:.2f}% und für einen schweren Unfall {schwer_prozent:.2f}%. Es wird somit erwartet, dass der Unfall eher {categories[prediction]} ist. Angaben ohne Gewähr.")
+
+# Bild anzeigen
+st.subheader("Ranking der Einflussfaktoren auf die Vorhersage")
+st.image("WichtigkeitFeatureRanking.png", caption="Wichtigkeit der Features im Modell")
+
+# Hinzufügen der Map
+st.subheader("Unfallpunkte in Berlin 2018-2021")
+st.image("../infos/mapAccidentPoints.png", caption="Unfallpunkte auf der Berlinkarte")
