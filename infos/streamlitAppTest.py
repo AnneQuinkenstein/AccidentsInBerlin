@@ -12,7 +12,9 @@ model_filename = "../modelle_getuned/random_forest_model.pkl" # Pfad zum Modell 
 model = joblib.load(model_filename)
 
 # Benutzeroberfläche
-st.title("Unfallschwere Vorhersage")
+st.title("Wird ein Unfall in Berlin leicht oder schwer*?")
+st.subheader("Bitte gib links die Bedingungen ein, unter denen du einen Unfall befürchtest. Mit den open Data von Berlin wird die Wahrscheinlichkeit für die Unfallschwere mit dem Machine Learning-Algorithmus 'Random Forest' vorhergesagt.")
+st.write("*Wir können keine Aussage darüber treffen, ob du einen Unfall haben wirst und können keine Aussage über die Unfallwahrscheinlichkeit geben.")
 st.sidebar.header("Eingabedaten")
 
 #Bundesland
@@ -130,11 +132,10 @@ prediction = model.predict(input_df)[0] # [0] is used to get the prediction as a
 prediction_proba = model.predict_proba(input_df)[0]
 
 # Ausgabe der Ergebnisse
-st.subheader("Vorhersage des Unfalltyps")
+st.subheader("Wahrscheinlichkeitsverteilung für Schwere eines Unfalls")
 categories = {1: "Leicht", 0: "Schwer"}
 
 # Wahrscheinlichkeiten anzeigen
-st.subheader("Wahrscheinlichkeit für jede Unfallkategorie")
 probabilities = {
     "Leicht": prediction_proba[1],
     "Schwer": prediction_proba[0]
@@ -150,7 +151,7 @@ leicht_prozent = probabilities["Leicht"] * 100
 schwer_prozent = probabilities["Schwer"] * 100
 
 # Zusammenfassende Anzeige der Wahrscheinlichkeiten
-st.write(f"Unter den von dir eingegebenen Bedingungen beträgt die Wahrscheinlichkeit für einen leichten Unfall {leicht_prozent:.2f}% und für einen schweren Unfall {schwer_prozent:.2f}%. Es wird somit erwartet, dass der Unfall eher {categories[prediction]} ist. Angaben ohne Gewähr.")
+st.write(f"Falls du unter den von dir eingegebenen Bedingungen einen Unfall hast, beträgt die Wahrscheinlichkeit dafür, dass der Unfall leicht ausfällt {leicht_prozent:.2f}% und dafür dass er schwer ausfällt {schwer_prozent:.2f}%. Es wird somit erwartet, dass der Unfall wenn dann eher {categories[prediction]} ist. Angaben ohne Gewähr.")
 
 # Bild anzeigen
 st.subheader("Ranking der Einflussfaktoren auf die Vorhersage")
@@ -159,3 +160,5 @@ st.image("WichtigkeitFeatureRanking.png", caption="Wichtigkeit der Features im M
 # Hinzufügen der Map
 st.subheader("Unfallpunkte in Berlin 2018-2021")
 st.image("../infos/mapAccidentPoints.png", caption="Unfallpunkte auf der Berlinkarte")
+
+st.write("Open Data Portal Source: https://daten.berlin.de/datensaetze?q=strassenverkehrsunfalle%2520nach%2520Unfallort&sort=score+desc%2C+metadata_modified+desc")
