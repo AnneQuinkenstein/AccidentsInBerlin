@@ -11,7 +11,7 @@ Mit den open Data von Berlin wird die Wahrscheinlichkeit für die Unfallschwere 
 Wir können allerdings keine Aussage darüber treffen, ob man einen Unfall haben wird.
 ```
 
-Um die App zu starten, führen Sie bitte die Datei *../modelle_getuned/RF_getuned.ipynb* aus.
+Um die App zu starten, führen Sie bitte die Datei *../modelle_getuned/Rf_Rs_Gridgetuned.ipynb* aus.
 Dadurch wird die Datei *../modelle_getuned/random_forest_model.pkl* erstellt. 
 In dem Skript *../infos/streamlitAppTest.py* wird die pkl Datei geladen und die StreamlitApp gestartet. 
 
