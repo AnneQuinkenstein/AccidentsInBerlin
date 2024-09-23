@@ -6,12 +6,11 @@
 Anne Quinkenstein, Cindy Stammberger, Karenina Schröder
 
 ---
-<div style="border: 1px solid #ccc; padding: 16px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-Unser Projekt beschäftigt sich mit Straßenverkehrsunfällen in Berlin. Die Ergebnisse unserer Analyse werden in der Streamlit App dargestellt.
-In der StreamliteApp kann man die Bedingungen eingeben, unter denen man einen Unfall befürchtet, um rauszufinden, ob er schwerwiegend sein könnte.
-Mit den open Data von Berlin wird die Wahrscheinlichkeit für die Unfallschwere mit dem Machine Learning-Algorithmus 'Random Forest' vorhergesagt.
-Wir können allerdings keine Aussage darüber treffen, ob man einen Unfall haben wird.
-</div>
+> Unser Projekt beschäftigt sich mit Straßenverkehrsunfällen in Berlin. Die Ergebnisse unserer Analyse werden in der Streamlit App dargestellt.
+> In der StreamliteApp kann man die Bedingungen eingeben, unter denen man einen Unfall befürchtet, um rauszufinden, ob er schwerwiegend sein könnte.
+> Mit den open Data von Berlin wird die Wahrscheinlichkeit für die Unfallschwere mit dem Machine Learning-Algorithmus `Random Forest` vorhergesagt.
+> Wir können allerdings keine Aussage darüber treffen, ob man einen Unfall haben wird.
+
 
 
 * Um die App zu starten, führen Sie bitte die Datei *../modelle_getuned/Rf_Rs_Gridgetuned.ipynb* aus.
