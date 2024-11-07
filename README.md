@@ -1,6 +1,6 @@
 # Accidents In Berlin 
 ## Unfallrisiko AI Berlin
-### -Team 4- Anne Quinkenstein, Cindy Stammberger, Karenina Schröder
+###  Anne Quinkenstein, Cindy Stammberger, Karenina Schröder
 
 ---
 
